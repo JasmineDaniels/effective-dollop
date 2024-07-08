@@ -38,7 +38,7 @@ resource "oci_core_instance" "test-instance" {
 
 resource "oci_core_instance" "tester-instance" {
     # Required
-    availability_domain = var.availability_domain
+    availability_domain = "hsRu:US-ASHBURN-AD-3"
     compartment_id = var.compartment_id
     display_name = "my-terraform-vm2"
     shape = "VM.Standard.A1.Flex"
