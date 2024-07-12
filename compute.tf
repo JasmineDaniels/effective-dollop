@@ -9,7 +9,7 @@ variable "availability_domain" {
     default = "hsRu:US-ASHBURN-AD-1"
 }
 
-resource "oci_core_instance" "test-instance" {
+resource "oci_core_instance" "compute_instance1" {
     # Required
     availability_domain = var.availability_domain
     compartment_id = var.compartment_id
@@ -27,14 +27,14 @@ resource "oci_core_instance" "test-instance" {
 
     create_vnic_details {
         assign_public_ip = true
-        subnet_id = "ocid1.subnet.oc1.iad.aaaaaaaagr22ow6lmuhhstmus6rmfhmtooc7ltqintqsuz4wsxiras32b7ra"
+        subnet_id = resource.oci_core_subnet.subnet_1.id
         display_name = "Primaryvnic"
         hostname_label = "complex-env-vm01"
     }
     preserve_boot_volume = false
 }
 
-resource "oci_core_instance" "tester-instance" {
+resource "oci_core_instance" "compute_instance2" {
     # Required
     availability_domain = "hsRu:US-ASHBURN-AD-3"
     compartment_id = var.compartment_id
@@ -52,7 +52,7 @@ resource "oci_core_instance" "tester-instance" {
 
     create_vnic_details {
         assign_public_ip = true
-        subnet_id = "ocid1.subnet.oc1.iad.aaaaaaaagr22ow6lmuhhstmus6rmfhmtooc7ltqintqsuz4wsxiras32b7ra"
+        subnet_id = resource.oci_core_subnet.subnet_2.id
         display_name = "Primaryvnic"
         hostname_label = "complex-env-vm01"
     }
@@ -61,5 +61,5 @@ resource "oci_core_instance" "tester-instance" {
 
 # Output the result
 output "show-vm2-shape" {
-    value = resource.oci_core_instance[1].tester-instance.shape
+    value = resource.oci_core_instance.compute_instance2.shape
 }

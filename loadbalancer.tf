@@ -60,5 +60,5 @@ resource "oci_load_balancer_backend" "lb-be2" {
 }
 
 output "Load_Balancer_Public_IP" {
-  value = [oci_load_balancer.Load_Balancer.ip_addresses]
+  value = [oci_load_balancer.lb1.ip_addresses]
 }

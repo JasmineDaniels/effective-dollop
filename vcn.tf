@@ -121,7 +121,7 @@ resource "oci_core_subnet" "subnet_1" {
     availability_domain = var.availability_domain
     #cidr_block = "10.1.20.0/24"
     cidr_block = "10.4.1.0/24"
-    display_name = "tf_subnet2"
+    display_name = "tf_subnet1"
     dns_label = "testPrivate"
     security_list_ids = [oci_core_vcn.terraform_vcn.default_security_list_id]
     compartment_id = var.compartment_id
@@ -131,6 +131,7 @@ resource "oci_core_subnet" "subnet_1" {
 }
 
 resource "oci_core_subnet" "subnet_2" {
+    availability_domain = "hsRu:US-ASHBURN-AD-3"
     cidr_block = "10.4.0.0/24"
     display_name = "tf_subnet2"
     dns_label = "testPublic"
