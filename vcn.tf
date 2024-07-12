@@ -123,7 +123,8 @@ resource "oci_core_subnet" "subnet_1" {
     cidr_block = "10.4.1.0/24"
     display_name = "tf_subnet1"
     dns_label = "testPrivate"
-    security_list_ids = [oci_core_vcn.terraform_vcn.default_security_list_id]
+    #security_list_ids = [oci_core_vcn.terraform_vcn.default_security_list_id]
+    security_list_ids = [resource.oci_core_security_list.sl.id]
     compartment_id = var.compartment_id
     vcn_id = oci_core_vcn.terraform_vcn.id
     route_table_id = oci_core_vcn.terraform_vcn.default_route_table_id
@@ -135,7 +136,7 @@ resource "oci_core_subnet" "subnet_2" {
     cidr_block = "10.4.0.0/24"
     display_name = "tf_subnet2"
     dns_label = "testPublic"
-    security_list_ids = [oci_core_vcn.terraform_vcn.default_security_list_id]
+    security_list_ids = [resource.oci_core_security_list.sl.id]
     compartment_id = var.compartment_id
     vcn_id = oci_core_vcn.terraform_vcn.id
     route_table_id = oci_core_vcn.terraform_vcn.default_route_table_id
