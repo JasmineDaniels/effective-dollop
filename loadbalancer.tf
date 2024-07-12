@@ -7,6 +7,7 @@ resource "oci_load_balancer" "lb1" {
 
   subnet_ids = [
     oci_core_subnet.subnet_1.id,
+    oci_core_subnet.subnet_2.id,
   ]
 
   display_name = "load-balancer"
