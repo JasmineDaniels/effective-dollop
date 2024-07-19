@@ -31,6 +31,12 @@ resource "oci_core_instance" "compute_instance1" {
         display_name = "Primaryvnic"
         hostname_label = "complex-env-vm01"
     }
+
+    metadata = {
+        ssh_authorized_keys = var.pub_key
+        user_data = "${base64encode(file("./init_script1.sh"))}"
+    }
+
     preserve_boot_volume = false
 }
 
@@ -56,6 +62,12 @@ resource "oci_core_instance" "compute_instance2" {
         display_name = "Primaryvnic"
         hostname_label = "complex-env-vm01"
     }
+
+    metadata = {
+        ssh_authorized_keys = var.pub_key
+        user_data = "${base64encode(file("./init_script1.sh"))}"
+    }
+
     preserve_boot_volume = false
 }
 
