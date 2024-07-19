@@ -4,3 +4,4 @@ variable "fingerprint" {}
 variable "compartment_id" {}
 variable "home_region" {}
 variable "region" {}
+variable "pub_key" {}
