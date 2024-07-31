@@ -6,11 +6,10 @@ resource "oci_load_balancer" "lb1" {
   compartment_id = var.compartment_id
 
   subnet_ids = [
-    oci_core_subnet.subnet_1.id,
-    oci_core_subnet.subnet_2.id,
+    oci_core_subnet.subnet_2.id
   ]
 
-  display_name = "load-balancer"
+  display_name = "tf-load-balancer"
 }
 
 resource "oci_load_balancer_backend_set" "lb-bes1" {

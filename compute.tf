@@ -27,7 +27,7 @@ resource "oci_core_instance" "compute_instance1" {
 
     create_vnic_details {
         assign_public_ip = true
-        subnet_id = resource.oci_core_subnet.subnet_1.id
+        subnet_id = resource.oci_core_subnet.subnet_2.id
         display_name = "Primaryvnic"
         hostname_label = "complex-env-vm01"
     }
@@ -60,7 +60,7 @@ resource "oci_core_instance" "compute_instance2" {
         assign_public_ip = true
         subnet_id = resource.oci_core_subnet.subnet_2.id
         display_name = "Primaryvnic"
-        hostname_label = "complex-env-vm01"
+        hostname_label = "complex-env-vm02"
     }
 
     metadata = {

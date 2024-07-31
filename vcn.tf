@@ -25,24 +25,75 @@ resource "oci_core_default_route_table" "default_route_table" {
 
 # Create security list to allow internet access from compute and ssh access
 
-resource "oci_core_security_list" "sl" {
+resource "oci_core_security_list" "app_sl" {
   compartment_id = var.compartment_id
-  display_name   = "security-list"
+  display_name   = "app-backends-sl"
   vcn_id         = oci_core_vcn.terraform_vcn.id
 
   egress_security_rules {
     destination = "0.0.0.0/0"
-    protocol    = "6"
+    protocol    = "all"
   }
 
-  egress_security_rules {
-    protocol    = "6"
-    destination = "10.4.0.0/24"
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = 22
+      min = 22
+    }
+  }
+
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = 80
+      min = 80
+    }
+  }
+
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.4.0.0/24"
 
     tcp_options {
       max = 5000
       min = 5000
     }
+  }
+
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    icmp_options {
+      type = 3
+      code = 4
+    }
+  }
+
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.4.0.0/16"
+
+    icmp_options {
+        #Required
+        type = 3
+    }
+  }
+}
+
+resource "oci_core_security_list" "LB_sl" {
+  compartment_id = var.compartment_id
+  display_name   = "LB-sl"
+  vcn_id         = oci_core_vcn.terraform_vcn.id
+
+  egress_security_rules {
+    destination = "0.0.0.0/0"
+    protocol    = "all"
   }
 
   egress_security_rules {
@@ -70,16 +121,6 @@ resource "oci_core_security_list" "sl" {
     source   = "0.0.0.0/0"
 
     tcp_options {
-      max = 1521
-      min = 1521
-    }
-  }
-
-  ingress_security_rules {
-    protocol = "6"
-    source   = "0.0.0.0/0"
-
-    tcp_options {
       max = 80
       min = 80
     }
@@ -87,21 +128,11 @@ resource "oci_core_security_list" "sl" {
 
   ingress_security_rules {
     protocol = "6"
-    source   = "10.4.0.0/24"
+    source   = "0.0.0.0/0"
 
-    tcp_options {
-      max = 5000
-      min = 5000
-    }
-  }
-
-    ingress_security_rules {
-    protocol = "6"
-    source   = "10.4.1.0/24"
-
-    tcp_options {
-      max = 5000
-      min = 5000
+    icmp_options {
+      type = 3
+      code = 4
     }
   }
 
@@ -118,13 +149,12 @@ resource "oci_core_security_list" "sl" {
 
 
 resource "oci_core_subnet" "subnet_1" {
-    availability_domain = var.availability_domain
     #cidr_block = "10.1.20.0/24"
     cidr_block = "10.4.1.0/24"
-    display_name = "tf_subnet1"
+    display_name = "tf_backends_subnet"
     dns_label = "testPrivate"
     #security_list_ids = [oci_core_vcn.terraform_vcn.default_security_list_id]
-    security_list_ids = [resource.oci_core_security_list.sl.id]
+    security_list_ids = [resource.oci_core_security_list.app_sl.id]
     compartment_id = var.compartment_id
     vcn_id = oci_core_vcn.terraform_vcn.id
     route_table_id = oci_core_vcn.terraform_vcn.default_route_table_id
@@ -132,11 +162,10 @@ resource "oci_core_subnet" "subnet_1" {
 }
 
 resource "oci_core_subnet" "subnet_2" {
-    availability_domain = "hsRu:US-ASHBURN-AD-3"
     cidr_block = "10.4.0.0/24"
-    display_name = "tf_subnet2"
+    display_name = "tf_LB_subnet"
     dns_label = "testPublic"
-    security_list_ids = [resource.oci_core_security_list.sl.id]
+    security_list_ids = [resource.oci_core_security_list.LB_sl.id]
     compartment_id = var.compartment_id
     vcn_id = oci_core_vcn.terraform_vcn.id
     route_table_id = oci_core_vcn.terraform_vcn.default_route_table_id

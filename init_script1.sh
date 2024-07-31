@@ -17,4 +17,5 @@ sudo echo "NPM VERSION: $(npm -v)"
 #open firewall ports
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-port=5000/tcp
+sudo firewall-cmd --permanent --zone=public --add-port=3000/tcp
 sudo firewall-cmd --reload
