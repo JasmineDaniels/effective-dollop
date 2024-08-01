@@ -1,8 +1,8 @@
 ## Copyright © 2020, Oracle and/or its affiliates. 
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
-resource "oci_load_balancer" "lb1" {
-  shape          = "100Mbps"
+resource "oci_load_balancer_load_balancer" "lb1" {
+  shape          = "flexible"
   compartment_id = var.compartment_id
 
   subnet_ids = [
@@ -10,6 +10,12 @@ resource "oci_load_balancer" "lb1" {
   ]
 
   display_name = "tf-load-balancer"
+
+  shape_details {
+    #Required
+    maximum_bandwidth_in_mbps = 10
+    minimum_bandwidth_in_mbps = 400
+  }
 }
 
 resource "oci_load_balancer_backend_set" "lb-bes1" {
@@ -60,5 +66,5 @@ resource "oci_load_balancer_backend" "lb-be2" {
 }
 
 output "Load_Balancer_Public_IP" {
-  value = [oci_load_balancer.lb1.ip_addresses]
+  value = [oci_load_balancer_load_balancer.lb1.ip_addresses]
 }
