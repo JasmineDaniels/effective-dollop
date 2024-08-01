@@ -66,7 +66,7 @@ resource "oci_core_security_list" "app_sl" {
   }
 
   ingress_security_rules {
-    protocol = "6"
+    protocol = "1"
     source   = "0.0.0.0/0"
 
     icmp_options {
@@ -76,7 +76,7 @@ resource "oci_core_security_list" "app_sl" {
   }
 
   ingress_security_rules {
-    protocol = "6"
+    protocol = "1"
     source   = "10.5.0.0/16"
 
     icmp_options {
@@ -127,7 +127,7 @@ resource "oci_core_security_list" "LB_sl" {
   }
 
   ingress_security_rules {
-    protocol = "6"
+    protocol = "1"
     source   = "0.0.0.0/0"
 
     icmp_options {
@@ -137,7 +137,7 @@ resource "oci_core_security_list" "LB_sl" {
   }
 
   ingress_security_rules {
-    protocol = "6"
+    protocol = "1"
     source   = "10.5.0.0/16"
 
     icmp_options {
