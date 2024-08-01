@@ -1,5 +1,5 @@
 resource "oci_core_vcn" "terraform_vcn" {
-    cidr_block = "10.4.0.0/16"
+    cidr_block = "10.5.0.0/16"
     compartment_id = var.compartment_id
     display_name = "testVCN_terraform"
     dns_label = "testVCN1dns"
@@ -57,7 +57,7 @@ resource "oci_core_security_list" "app_sl" {
 
   ingress_security_rules {
     protocol = "6"
-    source   = "10.4.0.0/24"
+    source   = "10.5.0.0/24"
 
     tcp_options {
       max = 5000
@@ -77,7 +77,7 @@ resource "oci_core_security_list" "app_sl" {
 
   ingress_security_rules {
     protocol = "6"
-    source   = "10.4.0.0/16"
+    source   = "10.5.0.0/16"
 
     icmp_options {
         #Required
@@ -98,7 +98,7 @@ resource "oci_core_security_list" "LB_sl" {
 
   egress_security_rules {
     protocol    = "6"
-    destination = "10.4.1.0/24"
+    destination = "10.5.1.0/24"
 
     tcp_options {
       max = 5000
@@ -138,7 +138,7 @@ resource "oci_core_security_list" "LB_sl" {
 
   ingress_security_rules {
     protocol = "6"
-    source   = "10.4.0.0/16"
+    source   = "10.5.0.0/16"
 
     icmp_options {
         #Required
@@ -150,7 +150,7 @@ resource "oci_core_security_list" "LB_sl" {
 
 resource "oci_core_subnet" "subnet_1" {
     #cidr_block = "10.1.20.0/24"
-    cidr_block = "10.4.1.0/24"
+    cidr_block = "10.5.1.0/24"
     display_name = "tf_backends_subnet"
     dns_label = "testPrivate"
     #security_list_ids = [oci_core_vcn.terraform_vcn.default_security_list_id]
@@ -162,7 +162,7 @@ resource "oci_core_subnet" "subnet_1" {
 }
 
 resource "oci_core_subnet" "subnet_2" {
-    cidr_block = "10.4.0.0/24"
+    cidr_block = "10.5.0.0/24"
     display_name = "tf_LB_subnet"
     dns_label = "testPublic"
     security_list_ids = [resource.oci_core_security_list.LB_sl.id]
