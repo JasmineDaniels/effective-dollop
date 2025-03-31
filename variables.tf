@@ -5,3 +5,12 @@ variable "compartment_id" {}
 variable "home_region" {}
 variable "region" {}
 variable "pub_key" {}
+variable "availability_domain" {}
+variable "availability_domain_2" {}
+variable "compute_shape" {}
+variable "compute1_image_ocid" {}
+variable "compute2_image_ocid" {}
+variable "terraform_vcn_cidr" {}
+variable "subnet_1_cidr" {}
+variable "subnet_2_cidr" {}
+variable "block_size" {}

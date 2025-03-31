@@ -1,5 +1,6 @@
 resource "oci_core_vcn" "terraform_vcn" {
-    cidr_block = "10.5.0.0/16"
+    #cidr_block = "10.5.0.0/16"
+    cidr_block = var.terraform_vcn_cidr
     compartment_id = var.compartment_id
     display_name = "testVCN_terraform"
     dns_label = "testVCN1dns"
@@ -21,7 +22,6 @@ resource "oci_core_default_route_table" "default_route_table" {
         network_entity_id = oci_core_internet_gateway.terraform_internet_gateway.id
     }
 }
-
 
 # Create security list to allow internet access from compute and ssh access
 
@@ -57,11 +57,11 @@ resource "oci_core_security_list" "app_sl" {
 
   ingress_security_rules {
     protocol = "6"
-    source   = "10.5.0.0/24"
+    source   = var.subnet_2_cidr
 
     tcp_options {
-      max = 5000
-      min = 5000
+      max = 3000
+      min = 3000
     }
   }
 
@@ -77,11 +77,21 @@ resource "oci_core_security_list" "app_sl" {
 
   ingress_security_rules {
     protocol = "1"
-    source   = "10.5.0.0/16"
+    source   = var.terraform_vcn_cidr
 
     icmp_options {
         #Required
         type = 3
+    }
+  }
+
+  ingress_security_rules {
+    protocol = "1"
+    source   = "0.0.0.0/0
+
+    icmp_options {
+        #Required
+        type = 8
     }
   }
 }
@@ -98,11 +108,11 @@ resource "oci_core_security_list" "LB_sl" {
 
   egress_security_rules {
     protocol    = "6"
-    destination = "10.5.1.0/24"
+    destination = var.subnet_1_cidr
 
     tcp_options {
-      max = 5000
-      min = 5000
+      max = 3000
+      min = 3000
     }
   }
 
@@ -138,7 +148,7 @@ resource "oci_core_security_list" "LB_sl" {
 
   ingress_security_rules {
     protocol = "1"
-    source   = "10.5.0.0/16"
+    source   = var.terraform_vcn_cidr
 
     icmp_options {
         #Required
@@ -150,7 +160,7 @@ resource "oci_core_security_list" "LB_sl" {
 
 resource "oci_core_subnet" "subnet_1" {
     #cidr_block = "10.1.20.0/24"
-    cidr_block = "10.5.1.0/24"
+    cidr_block = var.subnet_1_cidr
     display_name = "tf_backends_subnet"
     dns_label = "testPrivate"
     #security_list_ids = [oci_core_vcn.terraform_vcn.default_security_list_id]
@@ -162,7 +172,7 @@ resource "oci_core_subnet" "subnet_1" {
 }
 
 resource "oci_core_subnet" "subnet_2" {
-    cidr_block = "10.5.0.0/24"
+    cidr_block = var.subnet_2_cidr
     display_name = "tf_LB_subnet"
     dns_label = "testPublic"
     security_list_ids = [resource.oci_core_security_list.LB_sl.id]

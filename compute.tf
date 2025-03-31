@@ -5,15 +5,11 @@ provider "oci" {
     region = var.region
 }
 
-variable "availability_domain" {
-    default = "hsRu:US-ASHBURN-AD-1"
-}
-
 resource "oci_core_instance" "compute_instance1" {
     # Required
     availability_domain = var.availability_domain
     compartment_id = var.compartment_id
-    shape = "VM.Standard.A1.Flex"
+    shape = var.compute_shape
     display_name = "terraform-vm1"
     shape_config {
         memory_in_gbs = 6
@@ -21,7 +17,7 @@ resource "oci_core_instance" "compute_instance1" {
     }
 
     source_details {
-        source_id = "ocid1.image.oc1.iad.aaaaaaaamo3amvibu2izgrng5zs4u34yw5y2g2v3v5l4fxvbeezepcsren7q"
+        source_id = var.compute1_image_ocid
         source_type = "image"
     }
 
@@ -42,17 +38,17 @@ resource "oci_core_instance" "compute_instance1" {
 
 resource "oci_core_instance" "compute_instance2" {
     # Required
-    availability_domain = "hsRu:US-ASHBURN-AD-3"
+    availability_domain = var.availability_domain_2
     compartment_id = var.compartment_id
     display_name = "terraform-vm2"
-    shape = "VM.Standard.A1.Flex"
+    shape = var.compute_shape
     shape_config {
         memory_in_gbs = 6
         ocpus = 1
     }
 
     source_details {
-        source_id = "ocid1.image.oc1.iad.aaaaaaaamo3amvibu2izgrng5zs4u34yw5y2g2v3v5l4fxvbeezepcsren7q"
+        source_id = var.compute2_image_ocid
         source_type = "image"
     }
 
