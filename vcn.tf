@@ -87,7 +87,7 @@ resource "oci_core_security_list" "app_sl" {
 
   ingress_security_rules {
     protocol = "1"
-    source   = "0.0.0.0/0
+    source   = "0.0.0.0/0"
 
     icmp_options {
         #Required
